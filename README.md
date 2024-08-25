@@ -1,1 +1,1 @@
-# serial-HG-is-not-finite-state
+This repo contains a Python script that implements a non-finite-state serial Harmonic Grammar. The grammar implements coordinated deletion ([Hao 2019](https://doi.org/10.15398/jlm.v7i2.210)) with weighted constraints. All constraints are defined following Hao, with the weights determined manually.
