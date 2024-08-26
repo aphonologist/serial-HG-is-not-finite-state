@@ -1,7 +1,7 @@
 def harmony(x):
   h = 0
   # ident, dep, STOP, *ab, maxC, *caa, *baca, maxA, maxB
-  ws = [9,   9,    4,   4,    9,    2,     9,    1,    1]
+  ws = [5,   5,    4,   4,    5,    2,     1,    1,    1]
   for i in range(9):
     h += ws[i] * x[i]
   return h
