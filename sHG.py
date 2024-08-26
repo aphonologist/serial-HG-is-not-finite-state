@@ -49,81 +49,81 @@ for m in range(1,50):
       print(m,n)
       continue
 
-  ur = 'aabb' * (m+1) + 'aacaa' + 'bbaa' * (n+1)
-  input = ur
-  if m > n:
-    expected = 'aabb' * (m-n) + 'aacaa'
-  if m < n:
-    expected = 'aacaa' + 'bbaa' * (n-m)
-
-  # collect intermediate representations to memoize
-  irs = set()
-
-  while True:
-    irs.add(input)
-    # faithful candidate
-    best_cand = input
-    # ident, dep, STOP, *ab, maxC, *caa, *baca, maxA, maxB
-    vios = [0,0,stop(best_cand),ab(best_cand),0,caa(best_cand),baca(best_cand),0,0]
-    best_harm = harmony(vios)
-
-    # make one change
-    for i in range(len(input)):
-      for seg in 'abc':
-        new_cand = input[:i] + seg + input[i+1:]
-        # ident, dep, STOP, *ab, maxC, *caa, *baca, maxA, maxB
-        new_vios = [1,0,stop(new_cand),ab(new_cand),0,caa(new_cand),baca(new_cand),0,0]
-        new_harm = harmony(new_vios)
-        if new_harm < best_harm:
-          best_cand = new_cand
-          best_harm = new_harm
-
-    # insert one segment
-    for i in range(len(input)):
-      for seg in 'abc':
-        new_cand = input[:i] + seg + input[i:]
-        # ident, dep, STOP, *ab, maxC, *caa, *baca, maxA, maxB
-        new_vios = [0,1,stop(new_cand),ab(new_cand),0,caa(new_cand),baca(new_cand),0,0]
-        new_harm = harmony(new_vios)
-        if new_harm < best_harm:
-          best_cand = new_cand
-          best_harm = new_harm
-
-    # delete one segment
-    for i in range(len(input)):
-      deleted = input[i]
-      new_cand = input[:i] + input[i+1:]
-      # ident, dep, STOP, *ab, maxC, *caa, *baca, maxA, maxB
-      new_vios = [0,0,stop(new_cand),ab(new_cand),0,caa(new_cand),baca(new_cand),0,0]
-      if deleted == 'c':
-        new_vios[4] = 1
-      elif deleted == 'a':
-        new_vios[7] = 1
-      else:
-        new_vios[8] = 1
-      new_harm = harmony(new_vios)
-      if new_harm < best_harm:
-        best_cand = new_cand
-        best_harm = new_harm
-
-    # check for convergence
-    if input == best_cand:
-      break
-
-    # optimal candidate is new input
-    input = best_cand
-    
-    # check for previously computed
-    if input in memo:
-      best_cand = memo[input]
-      break
-
-  # print if there's an unexpected surface form
-  sr = best_cand
-  if not sr == expected:
-    print(m, n, ur, expected, sr)
+    ur = 'aabb' * (m+1) + 'aacaa' + 'bbaa' * (n+1)
+    input = ur
+    if m > n:
+      expected = 'aabb' * (m-n) + 'aacaa'
+    if m < n:
+      expected = 'aacaa' + 'bbaa' * (n-m)
   
-  # update memoization
-  for ir in irs:
-    if ir not in memo:
-      memo[ir] = sr
+    # collect intermediate representations to memoize
+    irs = set()
+  
+    while True:
+      irs.add(input)
+      # faithful candidate
+      best_cand = input
+      # ident, dep, STOP, *ab, maxC, *caa, *baca, maxA, maxB
+      vios = [0,0,stop(best_cand),ab(best_cand),0,caa(best_cand),baca(best_cand),0,0]
+      best_harm = harmony(vios)
+  
+      # make one change
+      for i in range(len(input)):
+        for seg in 'abc':
+          new_cand = input[:i] + seg + input[i+1:]
+          # ident, dep, STOP, *ab, maxC, *caa, *baca, maxA, maxB
+          new_vios = [1,0,stop(new_cand),ab(new_cand),0,caa(new_cand),baca(new_cand),0,0]
+          new_harm = harmony(new_vios)
+          if new_harm < best_harm:
+            best_cand = new_cand
+            best_harm = new_harm
+  
+      # insert one segment
+      for i in range(len(input)):
+        for seg in 'abc':
+          new_cand = input[:i] + seg + input[i:]
+          # ident, dep, STOP, *ab, maxC, *caa, *baca, maxA, maxB
+          new_vios = [0,1,stop(new_cand),ab(new_cand),0,caa(new_cand),baca(new_cand),0,0]
+          new_harm = harmony(new_vios)
+          if new_harm < best_harm:
+            best_cand = new_cand
+            best_harm = new_harm
+  
+      # delete one segment
+      for i in range(len(input)):
+        deleted = input[i]
+        new_cand = input[:i] + input[i+1:]
+        # ident, dep, STOP, *ab, maxC, *caa, *baca, maxA, maxB
+        new_vios = [0,0,stop(new_cand),ab(new_cand),0,caa(new_cand),baca(new_cand),0,0]
+        if deleted == 'c':
+          new_vios[4] = 1
+        elif deleted == 'a':
+          new_vios[7] = 1
+        else:
+          new_vios[8] = 1
+        new_harm = harmony(new_vios)
+        if new_harm < best_harm:
+          best_cand = new_cand
+          best_harm = new_harm
+  
+      # check for convergence
+      if input == best_cand:
+        break
+  
+      # optimal candidate is new input
+      input = best_cand
+      
+      # check for previously computed
+      if input in memo:
+        best_cand = memo[input]
+        break
+  
+    # print if there's an unexpected surface form
+    sr = best_cand
+    if not sr == expected:
+      print(m, n, ur, expected, sr)
+  
+    # update memoization
+    for ir in irs:
+      if ir not in memo:
+        memo[ir] = sr
